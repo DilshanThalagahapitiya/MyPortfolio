@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional iOS Developer Portfolio - SwiftUI Expert">
+    <title>iOS Developer Portfolio | SwiftUI Expert</title>
+
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation Bar - Sticky header that stays at top when scrolling -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <!-- Logo/Brand -->
+                <a href="#home" class="logo">
+                    <span class="logo-icon">📱</span>
+                    <span class="logo-text">iOS Developer</span>
+                </a>
+
+                <!-- Navigation Menu -->
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - First thing visitors see -->
+    <section class="hero" id="home">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="hero-greeting">Hi, I'm a</span>
+                    <span class="hero-role">Dilshan Thalagahapitiya</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Crafting beautiful, performant iOS applications with SwiftUI
+                </p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+
+                <!-- Modern Mouse Scroll Indicator -->
+                <div class="scroll-indicator">
+                    <div class="mouse">
+                        <div class="wheel"></div>
+                    </div>
+                    <span class="scroll-text">Scroll Down</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section - Introduction and background -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-description">
+  I’m a passionate iOS Developer with 3+ years of hands-on experience crafting high-quality mobile applications using SwiftUI. I specialize in transforming ideas into polished, production-ready apps — taking products all the way from early concept and architecture to successful App Store deployment.
+My technical expertise covers building scalable navigation architectures, real-time chat systems, in-app purchase integrations, and performance-optimized features that deliver smooth, engaging user experiences. I’m deeply focused on clean UI design, maintainable code structures, and Apple-standard best practices that ensure both usability and long-term scalability.
+                    </p>
+                    <p class="about-description">
+Professionally, I’ve had the opportunity to work with global teams. I previously contributed to innovative mobile solutions at Elegant Media — an Australia-based software company — where I strengthened my experience in enterprise-grade app development and international collaboration.
+
+Currently, I’m working remotely with Crede Technologies (Canada), continuing to build impactful iOS applications while embracing the flexibility and productivity of a work-from-home environment — something that truly aligns with my passion and workflow.
+
+For me, iOS development isn’t just a career — it’s a craft I continuously refine. I’m driven by learning new technologies, solving complex problems, and creating apps that make a meaningful difference in users’ daily lives.
+                    </p>
+
+                    <!-- Key Highlights -->
+                    <div class="highlights">
+                        <div class="highlight-item">
+                            <span class="highlight-icon">🚀</span>
+                            <div>
+                                <h4>App Store Publishing</h4>
+                                <p>Successfully published multiple apps to the App Store</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-icon">✈️</span>
+                            <div>
+                                <h4>TestFlight Distribution</h4>
+                                <p>Expert in beta testing and TestFlight build management</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <span class="highlight-icon">⚡</span>
+                            <div>
+                                <h4>SwiftUI Mastery</h4>
+                                <p>Building modern, declarative UIs with the latest iOS technologies</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section - Technical capabilities -->
+    <section class="skills" id="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <!-- Skill cards will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section - Main showcase of work with videos -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <p class="section-subtitle">
+                Explore my iOS development work through interactive video demonstrations
+            </p>
+
+            <!-- Project cards will be inserted here by JavaScript -->
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+    </section>
+
+    <!-- Contact Section - Get in touch -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Work Together</h2>
+            <p class="section-subtitle">
+                Have a project in mind? Let's discuss how I can help bring your iOS app vision to life.
+            </p>
+
+            <div class="contact-content">
+                <!-- Contact information cards -->
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <span class="contact-icon">📧</span>
+                        <h4>Email</h4>
+                        <a href="mailto:dilshan.thalagahapitiya11@gmail.com">dilshan.thalagahapitiya11@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <span class="contact-icon">💼</span>
+                        <h4>LinkedIn</h4>
+                        <a href="https://www.linkedin.com/in/dilshan-thalagahapitiya-a06300159/" target="_blank">Connect
+                            with me</a>
+                    </div>
+                    <div class="contact-card">
+                        <span class="contact-icon">💻</span>
+                        <h4>GitHub</h4>
+                        <a href="https://github.com/DilshanThalagahapitiya" target="_blank">View my codes</a>
+                    </div>
+                    <div class="contact-card">
+                        <span class="contact-icon">📄</span>
+                        <h4>Curriculum Vitae</h4>
+                        <a href="https://drive.google.com/uc?export=download&id=1Qo4MW7H4b6Y_WM1ozX7E2xG4istnSumO"
+                            target="_blank">Download my CV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 iOS Developer Portfolio. Built with passion for great apps.</p>
+        </div>
+    </footer>
+
+    <!-- Video Modal - Popup for playing project videos (supports both local and Google Drive) -->
+    <div class="modal" id="videoModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-body">
+                <!-- Video element or iframe will be inserted here dynamically by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file for interactivity -->
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>

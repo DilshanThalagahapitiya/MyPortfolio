@@ -162,6 +162,40 @@ section {
 
 .logo-icon {
     font-size: 1.5rem;
+    transition: var(--transition-base);
+}
+
+.logo-icon-container {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-profile-img {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--transition-base);
+    border: 1.5px solid var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+}
+
+/* State when scrolled past hero */
+.navbar.scrolled-past-hero .logo-icon {
+    opacity: 0;
+    transform: scale(0.5) rotate(-20deg);
+}
+
+.navbar.scrolled-past-hero .nav-profile-img {
+    opacity: 1;
+    transform: scale(1);
 }
 
 /* Navigation menu */
@@ -284,6 +318,15 @@ section {
     box-shadow: var(--glass-shadow);
     animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 2;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.6s;
+}
+
+.hero-profile-container.scrolled-out {
+    transform: translateY(-50px) scale(0.5);
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* Glossy ring effect */

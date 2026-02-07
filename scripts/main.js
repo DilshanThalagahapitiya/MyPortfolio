@@ -152,6 +152,23 @@ window.addEventListener('scroll', () => {
             scrollIndicator.classList.remove('indicator-hidden');
         }
     }
+
+    // Profile image morphing transition
+    const heroProfile = document.querySelector('.hero-profile-container');
+    if (heroProfile) {
+        const rect = heroProfile.getBoundingClientRect();
+        const heroMiddle = rect.top + rect.height / 2;
+
+        // When the middle of the hero image is above the bottom of the navbar
+        // We trigger the transition to the navbar image
+        if (heroMiddle < 100) {
+            navbar.classList.add('scrolled-past-hero');
+            heroProfile.classList.add('scrolled-out');
+        } else {
+            navbar.classList.remove('scrolled-past-hero');
+            heroProfile.classList.remove('scrolled-out');
+        }
+    }
 });
 
 /**

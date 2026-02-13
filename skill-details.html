@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Skill Details - iOS Developer Portfolio">
+    <title>Skill Details | iOS Developer Portfolio</title>
+
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Specific styles for skill details page, can be moved to main.css later */
+        .skill-hero {
+            padding-top: 120px;
+            padding-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(88, 86, 214, 0.1) 100%);
+            margin-bottom: 40px;
+        }
+
+        .skill-hero-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .skill-hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .skill-hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .no-projects {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            background: var(--glass-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <!-- Logo/Brand -->
+                <a href="index.html" class="logo">
+                    <div class="logo-icon-container">
+                        <span class="logo-icon">📱</span>
+                        <img src="images/profile.png" alt="Dilshan" class="nav-profile-img">
+                    </div>
+                    <span class="logo-text">iOS Developer</span>
+                </a>
+
+                <!-- Navigation Menu -->
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#skills" class="nav-link">Skills</a></li>
+                    <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Skill Hero Section -->
+    <section class="skill-hero">
+        <div class="container">
+            <a href="index.html#skills" class="back-link" style="text-align: left; float: left; width: 100%;">← Back to
+                Skills</a>
+            <div style="clear: both;"></div>
+            <div id="skill-header">
+                <!-- Content injected by JS -->
+                <h1 class="skill-hero-title">Loading...</h1>
+                <p class="skill-hero-description">Fetching skill details...</p>
+            </div>
+
+            <!-- Screenshots Slider Section - Moved to Top -->
+            <div id="skill-screenshots-container" style="margin-top: 40px; display: none;">
+                <!-- Slider injected here by JS -->
+            </div>
+
+            <!-- Extended Skill Details (About, Code, GitHub) -->
+            <div id="skill-details-content"
+                style="margin-top: 60px; text-align: left; max-width: 900px; margin-left: auto; margin-right: auto;">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Project Demo Section -->
+    <section class="projects" id="related-projects">
+        <div class="container">
+            <h2 class="section-title"
+                style="text-align: left; margin-left: 0; left: 0; transform: none; display: block;">Project Demo</h2>
+            <p class="section-subtitle" style="text-align: left; margin-left: 0; max-width: 100%;">
+                Watch the application in action
+            </p>
+
+            <!-- Project cards will be inserted here by JavaScript -->
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 iOS Developer Portfolio. Built with passion for great apps.</p>
+        </div>
+    </footer>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-body">
+                <!-- Video element or iframe will be inserted here dynamically by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>

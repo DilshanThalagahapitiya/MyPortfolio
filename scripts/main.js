@@ -9,44 +9,202 @@
  */
 const skills = [
     {
-        icon: '🧭',
-        title: 'Navigation Router',
-        description: 'Custom navigation systems with clean architecture, deep linking support, and seamless view transitions'
-    },
-    {
         icon: '💬',
         title: 'Chat Interfaces',
-        description: 'Real-time messaging with optimized performance, custom UI components, and message persistence'
+        description: 'Real-time messaging with optimized performance,Firebase API, custom UI components, and message persistence',
+        about: `
+            <p>Building a robust chat interface requires handling complex state management, real-time data synchronization, and a smooth user experience. This implementation uses <strong>Firebase Firestore</strong> for the backend/database to ensure instant message delivery.</p>
+            <p>Key features include:</p>
+            <ul>
+                <li>Optimized list rendering with lazy loading for performance.</li>
+                <li>Custom message bubbles with support for text, images, and emojis.</li>
+                <li>Real-time typing indicators and read receipts.</li>
+                <li>Offline persistence using local caching.</li>
+            </ul>
+        `,
+        codeSnippet: `
+//
+//  ChatListView.swift
+//  ChatView
+//
+//  Created by Dilshan Thalagahapitiya on 2026-02-09.
+//
+
+import SwiftUI
+
+struct ChatListView: View {
+    @State var vm: ChatListVM
+    @EnvironmentObject private var coordinator: NavigationCoordinator
+    @EnvironmentObject private var authVM: AuthVM
+    @State private var showingCreateGroup = false
+    
+    init(vm: ChatListVM = ChatListVM()) {
+        _vm = State(initialValue: vm)
+    }
+    
+    var body: some View {
+        ZStack {
+            VStack(spacing:0){
+                List {
+                    ForEach(vm.chats) { chat in
+                        Button {
+                            if let currentUser = authVM.currentUser {
+                                coordinator.push(.chatDetail(chat: chat, currentUser: currentUser))
+                            }
+                        } label: {
+                            ChatCardView(chat: chat)
+                                .padding(.vertical, 4)
+                        }
+                        .buttonStyle(.plain)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                Task { await vm.deleteChat(chat.id) }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                        .listRowSeparator(.automatic)
+                        .listRowBackground(Color.secondaryTextColor.opacity(0.35))
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    }//ForEach
+                }//List
+                .listStyle(.automatic)
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
+            }//VStack
+            
+            if let error = vm.errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.largeTitle)
+                        .foregroundColor(.red)
+                    Text(error)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    Button("Retry") {
+                        Task { await vm.fetchChats() }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black.opacity(0.8))
+            }
+            
+            if vm.isLoading {
+                LoadingOverlay(message: "Loading chats...")
+            }
+        }//ZStack
+        .navigationTitle("Chats")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                // User info and logout
+                Menu {
+                    if let user = authVM.currentUser {
+                        Text(user.name)
+                        Text(user.email ?? "")
+                            .font(.caption)
+                        Divider()
+                    }
+                    Button(role: .destructive) {
+                        authVM.signOut()
+                    } label: {
+                        Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
+                    }
+                } label: {
+                    Image(systemName: "person.circle.fill")
+                        .font(.title3)
+                }
+            }//ToolBarItem
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack{
+                    Button(action: { showingCreateGroup = true }) {
+                        Image(systemName: "square.and.pencil")
+                    }
+                }//HStack
+            }//ToolBarItem
+            
+        }//ToolBar
+        .sheet(isPresented: $showingCreateGroup) {
+            GroupChatCreationView(availableUsers: vm.users) { name, participants in
+                Task {
+                    await vm.createChat(name: name, participants: participants)
+                }
+            }
+        }
+        .task {
+            await vm.fetchChats()
+            await vm.fetchUsers()
+        }
+
+    }
+}
+
+#Preview {
+    let mockService = MockChatService()
+    let mockVM = ChatListVM(chatService: mockService)
+    let mockAuthVM = AuthVM()
+    
+    return NavigationStack {
+        ChatListView(vm: mockVM)
+            .environmentObject(NavigationCoordinator())
+            .environmentObject(mockAuthVM)
+    }
+}
+        `,
+        githubLink: 'https://github.com/DilshanThalagahapitiya/ChatView.git',
+        relatedTags: ['Real-time', 'Firebase', 'Chat', 'Messaging'],
+        screenshots: [
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 22.25.54.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.27.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.34.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.46.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.03.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.14.png',
+            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.29.png'
+        ]
+    },
+    {
+        icon: '🧭',
+        title: 'Navigation Router',
+        description: 'Custom navigation systems with clean architecture, deep linking support, and seamless view transitions',
+        relatedTags: ['Navigation', 'Coordinator Pattern', 'Deep Links', 'Routing']
     },
     {
         icon: '💳',
         title: 'In-App Purchases',
-        description: 'StoreKit integration, subscription management, receipt validation, and restore purchases functionality'
+        description: 'StoreKit integration, subscription management, receipt validation, and restore purchases functionality',
+        relatedTags: ['StoreKit', 'In-App Purchase', 'Subscriptions', 'Payment']
     },
     {
         icon: '📱',
         title: 'Home Screens',
-        description: 'Dynamic home screens with post sharing, custom feed layouts, and engaging user interactions'
+        description: 'Dynamic home screens with post sharing, custom feed layouts, and engaging user interactions',
+        relatedTags: ['UI Design', 'Social', 'Feed', 'Layout']
     },
     {
         icon: '🚀',
         title: 'App Store Publishing',
-        description: 'Complete app submission process, App Store optimization, and compliance with Apple guidelines'
+        description: 'Complete app submission process, App Store optimization, and compliance with Apple guidelines',
+        relatedTags: ['App Store', 'Publishing', 'ASO']
     },
     {
         icon: '✈️',
         title: 'TestFlight Builds',
-        description: 'Beta distribution, user feedback collection, and managing multiple test groups'
+        description: 'Beta distribution, user feedback collection, and managing multiple test groups',
+        relatedTags: ['TestFlight', 'Beta Testing', 'CI/CD']
     },
     {
         icon: '🎨',
         title: 'SwiftUI Design',
-        description: 'Modern declarative UIs with custom components, animations, and responsive layouts'
+        description: 'Modern declarative UIs with custom components, animations, and responsive layouts',
+        relatedTags: ['SwiftUI', 'Animation', 'Design System', 'UI Components']
     },
     {
         icon: '💾',
         title: 'Data Persistence',
-        description: 'Core Data, SwiftData, UserDefaults, and cloud sync implementations'
+        description: 'Core Data, SwiftData, UserDefaults, and cloud sync implementations',
+        relatedTags: ['Core Data', 'SwiftData', 'Persistence', 'Database']
     }
 ];
 
@@ -69,48 +227,48 @@ const skills = [
  * Embed:    https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview
  */
 const projects = [
-    {
-        title: 'Navigation Router System',
-        description: 'Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.',
-        videoSrc: 'https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview',  // Google Drive embed
-        isGoogleDrive: true,
-        tags: ['SwiftUI', 'Navigation', 'Coordinator Pattern']
-    },
+    // {
+    //     title: 'Navigation Router System',
+    //     description: 'Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.',
+    //     videoSrc: 'https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview',  // Google Drive embed
+    //     isGoogleDrive: true,
+    //     tags: ['SwiftUI', 'Navigation', 'Coordinator Pattern']
+    // },
     {
         title: 'Real-Time Chat Application',
         description: 'Developed a fully-featured chat interface with message bubbles, typing indicators, image sharing, and real-time updates using Combine framework.',
         videoSrc: 'https://drive.google.com/file/d/1_UgL8_H1XOfploaJ2FXiO3AG-EWWFBX5/preview',  // Google Drive embed
         isGoogleDrive: true,
         tags: ['SwiftUI', 'Combine', 'Real-time', 'Firebase']
-    },
-    {
-        title: 'In-App Purchase Integration',
-        description: 'Complete StoreKit 2 implementation with subscription management, purchase validation, and seamless user experience for premium features.',
-        videoSrc: 'https://drive.google.com/file/d/12Q8dRZdgeLy9BsbNmFwN1IRH0cD_j_Za/preview',  // Google Drive embed
-        isGoogleDrive: true,
-        tags: ['StoreKit', 'Subscriptions', 'Payment']
-    },
-    {
-        title: 'Social Feed & Sharing',
-        description: 'Created an engaging home screen with post creation, image uploads, social sharing capabilities, and pull-to-refresh functionality.',
-        videoSrc: 'videos/home-screen.mp4',  // Replace with your Google Drive embed link
-        isGoogleDrive: false,  // Set to true when using Google Drive
-        tags: ['SwiftUI', 'Social', 'Media Upload']
-    },
-    {
-        title: 'App Store Deployment',
-        description: 'Successfully published multiple apps to the App Store, including app screenshots, descriptions, metadata optimization, and compliance review.',
-        videoSrc: 'videos/app-store.mp4',  // Replace with your Google Drive embed link
-        isGoogleDrive: false,  // Set to true when using Google Drive
-        tags: ['Publishing', 'App Store Connect', 'ASO']
-    },
-    {
-        title: 'TestFlight Distribution',
-        description: 'Managed beta testing programs with TestFlight, coordinating feedback from testers, and iterating on builds before public release.',
-        videoSrc: 'videos/testflight.mp4',  // Replace with your Google Drive embed link
-        isGoogleDrive: false,  // Set to true when using Google Drive
-        tags: ['TestFlight', 'Beta Testing', 'CI/CD']
     }
+    // {
+    //     title: 'In-App Purchase Integration',
+    //     description: 'Complete StoreKit 2 implementation with subscription management, purchase validation, and seamless user experience for premium features.',
+    //     videoSrc: 'https://drive.google.com/file/d/12Q8dRZdgeLy9BsbNmFwN1IRH0cD_j_Za/preview',  // Google Drive embed
+    //     isGoogleDrive: true,
+    //     tags: ['StoreKit', 'Subscriptions', 'Payment']
+    // },
+    // {
+    //     title: 'Social Feed & Sharing',
+    //     description: 'Created an engaging home screen with post creation, image uploads, social sharing capabilities, and pull-to-refresh functionality.',
+    //     videoSrc: 'videos/home-screen.mp4',  // Replace with your Google Drive embed link
+    //     isGoogleDrive: false,  // Set to true when using Google Drive
+    //     tags: ['SwiftUI', 'Social', 'Media Upload']
+    // },
+    // {
+    //     title: 'App Store Deployment',
+    //     description: 'Successfully published multiple apps to the App Store, including app screenshots, descriptions, metadata optimization, and compliance review.',
+    //     videoSrc: 'videos/app-store.mp4',  // Replace with your Google Drive embed link
+    //     isGoogleDrive: false,  // Set to true when using Google Drive
+    //     tags: ['Publishing', 'App Store Connect', 'ASO']
+    // },
+    // {
+    //     title: 'TestFlight Distribution',
+    //     description: 'Managed beta testing programs with TestFlight, coordinating feedback from testers, and iterating on builds before public release.',
+    //     videoSrc: 'videos/testflight.mp4',  // Replace with your Google Drive embed link
+    //     isGoogleDrive: false,  // Set to true when using Google Drive
+    //     tags: ['TestFlight', 'Beta Testing', 'CI/CD']
+    // }
 ];
 
 /* ============================================
@@ -244,14 +402,20 @@ window.addEventListener('scroll', () => {
  */
 function renderSkills() {
     const skillsGrid = document.querySelector('.skills-grid');
+    if (!skillsGrid) return;
 
     // Generate HTML for each skill
-    const skillsHTML = skills.map(skill => `
-        <div class="skill-card">
-            <div class="skill-icon">${skill.icon}</div>
-            <h3 class="skill-title">${skill.title}</h3>
-            <p class="skill-description">${skill.description}</p>
-        </div>
+    const skillsHTML = skills.map((skill, index) => `
+        <a href="skill-details.html?id=${index}" class="skill-card-link" style="text-decoration: none; color: inherit; display: block;">
+            <div class="skill-card">
+                <div class="skill-icon">${skill.icon}</div>
+                <h3 class="skill-title">${skill.title}</h3>
+                <p class="skill-description">${skill.description}</p>
+                <div class="skill-hover-indicator" style="margin-top: 15px; font-size: 0.9rem; color: var(--primary-color); font-weight: 500;">
+                    View Details →
+                </div>
+            </div>
+        </a>
     `).join('');
 
     // Insert into DOM
@@ -270,6 +434,12 @@ function renderSkills() {
  * Controls only appear on local videos (Google Drive iframes can't be controlled)
  */
 function renderProjects() {
+    const projectsGrid = document.getElementById('projectsGrid');
+    if (!projectsGrid) return;
+
+    // Skip if on skill details page (it handles its own rendering)
+    if (window.location.pathname.includes('skill-details.html')) return;
+
     // Generate HTML for each project
     const projectsHTML = projects.map((project, index) => {
         // Prepare thumbnail preview
@@ -647,6 +817,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSkills();
     renderProjects();
 
+    // Check for skill details page
+    if (typeof initSkillDetails === 'function') {
+        initSkillDetails();
+    }
+
     // Initialize scroll animations
     // Wait a bit for content to render first
     setTimeout(() => {
@@ -655,6 +830,331 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Portfolio initialized successfully! 🎉');
 });
+
+/* ============================================
+   SKILL DETAILS PAGE LOGIC
+   ============================================ */
+
+/**
+ * Initialize the Skill Details page
+ * - Parsons URL params to get skill ID
+ * - Renders skill header
+ * - Filters and renders related projects
+ */
+function initSkillDetails() {
+    // Check if we are on the skill details page
+    if (!window.location.pathname.includes('skill-details.html')) return;
+
+    // Get ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const skillIndex = urlParams.get('id');
+
+    if (skillIndex === null || !skills[skillIndex]) {
+        // Handle invalid ID
+        const skillHeader = document.getElementById('skill-header');
+        if (skillHeader) {
+            skillHeader.innerHTML = `
+                <div class="skill-hero-icon">❓</div>
+                <h1 class="skill-hero-title">Skill Not Found</h1>
+                <p class="skill-hero-description">The skill you are looking for does not exist or has been removed.</p>
+            `;
+        }
+        return;
+    }
+
+    const skill = skills[skillIndex];
+
+    // Render Skill Header
+    const headerContainer = document.getElementById('skill-header');
+    if (headerContainer) {
+        headerContainer.innerHTML = `
+            <h1 class="skill-hero-title">${skill.title}</h1>
+            <p class="skill-hero-description">${skill.description}</p>
+        `;
+    }
+
+    // Render Screenshot Slider
+    const sliderContainer = document.getElementById('skill-screenshots-container');
+    if (sliderContainer && skill.screenshots && skill.screenshots.length > 0) {
+        sliderContainer.style.display = 'block';
+        renderImageSlider(skill.screenshots, 'skill-screenshots-container');
+    } else if (sliderContainer) {
+        sliderContainer.style.display = 'none';
+    }
+
+    // Render Extended Skill Details
+    const detailsContainer = document.getElementById('skill-details-content');
+    if (detailsContainer) {
+        let detailsHTML = '';
+
+        if (skill.about) {
+            detailsHTML += `
+                <div class="skill-detail-section mb-lg">
+                    <h3 class="section-title" style="text-align: left; margin-left: 0; display: block; left: 0; transform: none;">About Project</h3>
+                    <div class="skill-about-text" style="color: var(--text-secondary); line-height: 1.8; font-size: 1.1rem;">
+                        ${skill.about}
+                    </div>
+                </div>
+            `;
+        }
+
+        if (skill.codeSnippet) {
+            detailsHTML += `
+                <div class="skill-detail-section mb-lg">
+                    <h3 class="section-title" style="text-align: left; margin-left: 0; display: block; left: 0; transform: none;">Coding Parts</h3>
+                    <div class="code-block-container" style="background: #1e1e1e; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--glass-border); overflow-x: auto;">
+                        <pre><code style="font-family: 'Menlo', 'Monaco', 'Courier New', monospace; color: #a9b7c6;">${skill.codeSnippet.trim()}</code></pre>
+                    </div>
+                </div>
+            `;
+        }
+
+        if (skill.githubLink) {
+            detailsHTML += `
+                <div class="skill-detail-section mb-lg">
+                    <h3 class="section-title" style="text-align: left; margin-left: 0; display: block; left: 0; transform: none;">Source Code</h3>
+                    <a href="${skill.githubLink}" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                        </svg>
+                        View on GitHub
+                    </a>
+                </div>
+            `;
+        }
+
+        detailsContainer.innerHTML = detailsHTML;
+    }
+
+    // Filter Related Projects
+    const searchTags = skill.relatedTags || [skill.title];
+    const relatedProjects = projects.filter(project => {
+        return project.tags.some(tag => {
+            return searchTags.some(searchTag =>
+                tag.toLowerCase().includes(searchTag.toLowerCase())
+            );
+        });
+    });
+
+    // Render Projects
+    const projectsGrid = document.getElementById('projectsGrid');
+    if (projectsGrid) {
+        if (relatedProjects.length > 0) {
+            const projectsHTML = relatedProjects.map((project, index) => {
+                let thumbnailHTML = '';
+                let controlsHTML = '';
+
+                if (project.isGoogleDrive) {
+                    thumbnailHTML = `
+                        <iframe
+                            class="project-video-preview"
+                            id="preview-${index}"
+                            src="${project.videoSrc}"
+                            frameborder="0"
+                            allow="encrypted-media"
+                            allowfullscreen>
+                        </iframe>
+                    `;
+                } else {
+                    thumbnailHTML = `
+                        <video
+                            class="project-video-preview local-video"
+                            id="preview-${index}"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            data-index="${index}">
+                            <source src="${project.videoSrc}" type="video/mp4">
+                        </video>
+                    `;
+                    controlsHTML = `
+                        <div class="video-controls">
+                            <!-- Controls same as main page -->
+                             <button class="control-btn play-pause-btn" data-index="${index}" title="Play/Pause">
+                                <svg class="pause-icon-svg" viewBox="0 0 24 24" fill="white"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>
+                                <svg class="play-icon-svg hidden" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                            <button class="control-btn mute-btn" data-index="${index}" title="Mute/Unmute">
+                                <svg class="muted-icon-svg" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                                <svg class="unmuted-icon-svg hidden" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                return `
+                <div class="project-card"
+                     data-video="${project.videoSrc}"
+                     data-google-drive="${project.isGoogleDrive || false}"
+                     data-index="${index}">
+                    <div class="project-video-container">
+                        ${thumbnailHTML}
+                        ${controlsHTML}
+                        <div class="project-video-overlay">
+                            <div class="play-icon-large">▶</div>
+                            <p class="overlay-text">Click to watch full demo</p>
+                            ${project.isGoogleDrive ? '<small class="drive-badge">📁 Google Drive</small>' : ''}
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-description">${project.description}</p>
+                        <div class="project-tags">
+                            ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            projectsGrid.innerHTML = projectsHTML;
+            attachProjectCardListeners();
+            attachVideoControlListeners();
+            initializeVideoStates();
+        } else {
+            projectsGrid.innerHTML = `
+                <div class="no-projects">
+                    <p>No specific projects found for this skill yet.</p>
+                </div>
+            `;
+            // Keep styles consistent
+            projectsGrid.style.display = 'block';
+        }
+    }
+}
+
+/**
+ * Render Image Slider Component
+ * @param {string[]} images - Array of image paths
+ * @param {string} containerId - ID of container element
+ */
+function renderImageSlider(images, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    // Create slider HTML structure
+    container.innerHTML = `
+        <div class="container">
+            <h2 class="section-title" style="text-align: left; left: 0; transform: none; display: block; margin-left: 0;">App Screenshots</h2>
+            <div class="slider-wrapper">
+                <button class="slider-btn prev-btn" id="slider-prev">❮</button>
+                <div class="slider-track-container">
+                    <div class="slider-track" id="slider-track">
+                        ${images.map((img, index) => `
+                            <div class="slide">
+                                <img src="${img}" alt="Screenshot ${index + 1}" loading="lazy">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <button class="slider-btn next-btn" id="slider-next">❯</button>
+            </div>
+            <div class="slider-dots" id="slider-dots">
+                ${images.map((_, index) => `
+                    <button class="slider-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    // Slider Logic
+    const track = document.getElementById('slider-track');
+    const prevBtn = document.getElementById('slider-prev');
+    const nextBtn = document.getElementById('slider-next');
+    const dots = document.querySelectorAll('.slider-dot');
+
+    let currentIndex = 0;
+    const totalSlides = images.length;
+
+    function updateSlider() {
+        // Move track
+        const slideWidth = 100; // 100% width
+        track.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+
+        // Update dots
+        dots.forEach((dot, index) => {
+            if (index === currentIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    // Auto-sliding Logic
+    let autoSlideInterval;
+
+    function startAutoSlide() {
+        stopAutoSlide(); // Clear existing to be safe
+
+        // Only auto-slide if there is more than one slide
+        if (totalSlides <= 1) return;
+
+        autoSlideInterval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateSlider();
+        }, 2500); // 2.5 seconds for snappier feeling
+    }
+
+    function stopAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+        }
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener('click', () => {
+        stopAutoSlide();
+        currentIndex = (currentIndex + 1) % totalSlides;
+        updateSlider();
+        startAutoSlide(); // Restart after interaction
+    });
+
+    prevBtn.addEventListener('click', () => {
+        stopAutoSlide();
+        currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        updateSlider();
+        startAutoSlide(); // Restart after interaction
+    });
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            stopAutoSlide();
+            currentIndex = parseInt(dot.getAttribute('data-index'));
+            updateSlider();
+            startAutoSlide(); // Restart after interaction
+        });
+    });
+
+    // Pause on hover
+    const sliderWrapper = container.querySelector('.slider-wrapper');
+    if (sliderWrapper) {
+        sliderWrapper.addEventListener('mouseenter', stopAutoSlide);
+        sliderWrapper.addEventListener('mouseleave', startAutoSlide);
+    }
+
+    // Optional: Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        // Only react if slider is in view or active? 
+        // For simplicity, just reset timer if used
+        if (e.key === 'ArrowLeft') {
+            stopAutoSlide();
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateSlider();
+            startAutoSlide();
+        } else if (e.key === 'ArrowRight') {
+            stopAutoSlide();
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateSlider();
+            startAutoSlide();
+        }
+    });
+
+    // Start initial auto-slide
+    startAutoSlide();
+}
 
 /* ============================================
    HELPER FUNCTIONS

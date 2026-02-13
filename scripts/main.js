@@ -79,7 +79,7 @@ const projects = [
     {
         title: 'Real-Time Chat Application',
         description: 'Developed a fully-featured chat interface with message bubbles, typing indicators, image sharing, and real-time updates using Combine framework.',
-        videoSrc: 'https://drive.google.com/file/d/1iRxfvuAnZgrBHna6js-Gfbs8k5ykHpzx/preview',  // Google Drive embed
+        videoSrc: 'https://drive.google.com/file/d/1_UgL8_H1XOfploaJ2FXiO3AG-EWWFBX5/preview',  // Google Drive embed
         isGoogleDrive: true,
         tags: ['SwiftUI', 'Combine', 'Real-time', 'Firebase']
     },

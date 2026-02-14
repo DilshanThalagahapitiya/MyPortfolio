@@ -168,10 +168,55 @@ struct ChatListView: View {
         icon: '🧭',
         title: 'Navigation Router',
         description: 'Custom navigation systems with clean architecture, deep linking support, and seamless view transitions',
+        about: `
+            <p>Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.</p>
+            <p>Key features include:</p>
+            <ul>
+                <li>Implemented Coordinator pattern for SwiftUI navigation</li>
+                <li>Added centralized NavigationStack routing management</li>
+                <li>Integrated sheet and fullscreen cover presentation handling</li>
+                <li>Implemented deep link routing structure</li>
+                <li>Created scalable and modular navigation architecture</li>
+                <li>Prepared base foundation for multi-flow app navigation</li>
+            </ul>
+        `,
+        screenshots: [
+            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.30.png',
+            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.37.png',
+            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.45.png',
+            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.58.png',
+            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.33.05.png'
+        ],
         relatedTags: ['Navigation', 'Coordinator Pattern', 'Deep Links', 'Routing']
     },
     {
-        icon: '💳',
+        icon: '�',
+        title: 'YouTube Browser & Downloader',
+        description: 'A productivity-focused floating YouTube player & downloader built for macOS users.',
+        about: `
+            <p>A productivity-focused floating YouTube player & downloader built for macOS users — especially developers.</p>
+            <p>Whether you’re following coding tutorials, debugging with guides, or listening to tech talks, this tool keeps your video visible without switching windows.</p>
+            <p>Key features include:</p>
+            <ul>
+                <li>Always-on-top floating video player</li>
+                <li>Works across all apps and screens</li>
+                <li>Built-in YouTube video downloader</li>
+                <li>Lightweight and distraction-free UI</li>
+                <li>Perfect for coding, learning, and multitasking</li>
+            </ul>
+        `,
+        screenshots: [
+            'images/YoutybeFP/Screenshot 2026-02-15 at 2.10.38 AM (2).png',
+            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.09 AM.png',
+            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.12 AM.png',
+            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.21 AM.png',
+            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.28 AM.png',
+            'images/YoutybeFP/ss-yt1.png'
+        ],
+        relatedTags: ['macOS', 'SwiftUI', 'YouTube', 'Productivity']
+    },
+    {
+        icon: '�💳',
         title: 'In-App Purchases',
         description: 'StoreKit integration, subscription management, receipt validation, and restore purchases functionality',
         relatedTags: ['StoreKit', 'In-App Purchase', 'Subscriptions', 'Payment']
@@ -227,20 +272,27 @@ struct ChatListView: View {
  * Embed:    https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview
  */
 const projects = [
-    // {
-    //     title: 'Navigation Router System',
-    //     description: 'Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.',
-    //     videoSrc: 'https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview',  // Google Drive embed
-    //     isGoogleDrive: true,
-    //     tags: ['SwiftUI', 'Navigation', 'Coordinator Pattern']
-    // },
+    {
+        title: 'Navigation Router System',
+        description: 'Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.',
+        videoSrc: 'https://drive.google.com/file/d/1YhP5fV2YhPFU5HwgFf8lwxgcCuumz7xq/preview',  // Google Drive embed
+        isGoogleDrive: true,
+        tags: ['SwiftUI', 'Navigation', 'Coordinator Pattern']
+    },
     {
         title: 'Real-Time Chat Application',
         description: 'Developed a fully-featured chat interface with message bubbles, typing indicators, image sharing, and real-time updates using Combine framework.',
         videoSrc: 'https://drive.google.com/file/d/1_UgL8_H1XOfploaJ2FXiO3AG-EWWFBX5/preview',  // Google Drive embed
         isGoogleDrive: true,
         tags: ['SwiftUI', 'Combine', 'Real-time', 'Firebase']
-    }
+    },
+    {
+        title: 'Youtube Browser & Downloader',
+        description: 'Watch, float, and download YouTube videos on macOS while coding or working across multiple screens.',
+        videoSrc: 'https://drive.google.com/file/d/1dxDMITg59PR_4Fbai67zK-ZbzomrEOV_/preview',  // Google Drive embed
+        isGoogleDrive: true,
+        tags: ['AppKit', 'Combine', 'WebKit', 'UniformTypeIdentifiers']
+    },
     // {
     //     title: 'In-App Purchase Integration',
     //     description: 'Complete StoreKit 2 implementation with subscription management, purchase validation, and seamless user experience for premium features.',

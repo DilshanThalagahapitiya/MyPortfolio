@@ -17,7 +17,7 @@ const personalData = {
     // ========== ABOUT ==========
     about: {
         bio: [
-            "I'm a passionate iOS Developer with 4+ years of hands-on experience crafting high-quality mobile applications using SwiftUI. I specialize in transforming ideas into polished, production-ready apps — taking products all the way from early concept and architecture to successful App Store deployment. My technical expertise covers building scalable navigation architectures, real-time chat systems, in-app purchase integrations, and performance-optimized features that deliver smooth, engaging user experiences. I'm deeply focused on clean UI design, maintainable code structures, and Apple-standard best practices that ensure both usability and long-term scalability.",
+            "I'm a passionate iOS Developer with 3+ years of hands-on experience crafting high-quality mobile applications using SwiftUI. I specialize in transforming ideas into polished, production-ready apps — taking products all the way from early concept and architecture to successful App Store deployment. My technical expertise covers building scalable navigation architectures, real-time chat systems, in-app purchase integrations, and performance-optimized features that deliver smooth, engaging user experiences. I'm deeply focused on clean UI design, maintainable code structures, and Apple-standard best practices that ensure both usability and long-term scalability.",
 
             "Professionally, I've had the opportunity to work with global teams. I previously contributed to innovative mobile solutions at Elegant Media — an Australia-based software company — where I strengthened my experience in enterprise-grade app development and international collaboration. Currently, I'm working remotely with Crede Technologies (Canada), continuing to build impactful iOS applications while embracing the flexibility and productivity of a work-from-home environment — something that truly aligns with my passion and workflow. For me, iOS development isn't just a career — it's a craft I continuously refine. I'm driven by learning new technologies, solving complex problems, and creating apps that make a meaningful difference in users' daily lives."
         ],
@@ -61,7 +61,7 @@ const personalData = {
             company: "Elegant Media",
             role: "iOS Developer",
             location: "Australia",
-            period: "3 Years 6 Months",
+            period: "3 Years 4 Months",
             description: "Contributed to innovative mobile solutions and enterprise-grade app development with an international team."
         }
     ],

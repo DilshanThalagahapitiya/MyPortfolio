@@ -1,327 +1,26 @@
 /* ============================================
-   DATA CONFIGURATION
+   DATA CONFIGURATION — Loaded from data/personal.js
+   ============================================
+   All personal data is now centralized in data/personal.js.
+   Edit data/personal.js to update your portfolio content.
+   No changes needed here for data.
    ============================================ */
 
-/**
- * Skills Data Array
- * Each skill object contains information about your technical capabilities
- * Feel free to modify these to match your actual skills
- */
-const skills = [
-    {
-        icon: '💬',
-        title: 'Chat Interfaces',
-        description: 'Real-time messaging with optimized performance,Firebase API, custom UI components, and message persistence',
-        about: `
-            <p>Building a robust chat interface requires handling complex state management, real-time data synchronization, and a smooth user experience. This implementation uses <strong>Firebase Firestore</strong> for the backend/database to ensure instant message delivery.</p>
-            <p>Key features include:</p>
-            <ul>
-                <li>Optimized list rendering with lazy loading for performance.</li>
-                <li>Custom message bubbles with support for text, images, and emojis.</li>
-                <li>Real-time typing indicators and read receipts.</li>
-                <li>Offline persistence using local caching.</li>
-            </ul>
-        `,
-        codeSnippet: `
-//
-//  ChatListView.swift
-//  ChatView
-//
-//  Created by Dilshan Thalagahapitiya on 2026-02-09.
-//
-
-import SwiftUI
-
-struct ChatListView: View {
-    @State var vm: ChatListVM
-    @EnvironmentObject private var coordinator: NavigationCoordinator
-    @EnvironmentObject private var authVM: AuthVM
-    @State private var showingCreateGroup = false
-    
-    init(vm: ChatListVM = ChatListVM()) {
-        _vm = State(initialValue: vm)
-    }
-    
-    var body: some View {
-        ZStack {
-            VStack(spacing:0){
-                List {
-                    ForEach(vm.chats) { chat in
-                        Button {
-                            if let currentUser = authVM.currentUser {
-                                coordinator.push(.chatDetail(chat: chat, currentUser: currentUser))
-                            }
-                        } label: {
-                            ChatCardView(chat: chat)
-                                .padding(.vertical, 4)
-                        }
-                        .buttonStyle(.plain)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                Task { await vm.deleteChat(chat.id) }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        }
-                        .listRowSeparator(.automatic)
-                        .listRowBackground(Color.secondaryTextColor.opacity(0.35))
-                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    }//ForEach
-                }//List
-                .listStyle(.automatic)
-                .scrollContentBackground(.hidden)
-                .background(Color.clear)
-            }//VStack
-            
-            if let error = vm.errorMessage {
-                VStack(spacing: 16) {
-                    Image(systemName: "exclamationmark.triangle")
-                        .font(.largeTitle)
-                        .foregroundColor(.red)
-                    Text(error)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    Button("Retry") {
-                        Task { await vm.fetchChats() }
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black.opacity(0.8))
-            }
-            
-            if vm.isLoading {
-                LoadingOverlay(message: "Loading chats...")
-            }
-        }//ZStack
-        .navigationTitle("Chats")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                // User info and logout
-                Menu {
-                    if let user = authVM.currentUser {
-                        Text(user.name)
-                        Text(user.email ?? "")
-                            .font(.caption)
-                        Divider()
-                    }
-                    Button(role: .destructive) {
-                        authVM.signOut()
-                    } label: {
-                        Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
-                    }
-                } label: {
-                    Image(systemName: "person.circle.fill")
-                        .font(.title3)
-                }
-            }//ToolBarItem
-            
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack{
-                    Button(action: { showingCreateGroup = true }) {
-                        Image(systemName: "square.and.pencil")
-                    }
-                }//HStack
-            }//ToolBarItem
-            
-        }//ToolBar
-        .sheet(isPresented: $showingCreateGroup) {
-            GroupChatCreationView(availableUsers: vm.users) { name, participants in
-                Task {
-                    await vm.createChat(name: name, participants: participants)
-                }
-            }
-        }
-        .task {
-            await vm.fetchChats()
-            await vm.fetchUsers()
-        }
-
-    }
-}
-
-#Preview {
-    let mockService = MockChatService()
-    let mockVM = ChatListVM(chatService: mockService)
-    let mockAuthVM = AuthVM()
-    
-    return NavigationStack {
-        ChatListView(vm: mockVM)
-            .environmentObject(NavigationCoordinator())
-            .environmentObject(mockAuthVM)
-    }
-}
-        `,
-        githubLink: 'https://github.com/DilshanThalagahapitiya/ChatView.git',
-        relatedTags: ['Real-time', 'Firebase', 'Chat', 'Messaging'],
-        screenshots: [
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 22.25.54.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.27.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.34.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.47.46.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.03.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.14.png',
-            'images/ChatAppScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-13 at 23.48.29.png'
-        ]
-    },
-    {
-        icon: '🧭',
-        title: 'Navigation Router',
-        description: 'Custom navigation systems with clean architecture, deep linking support, and seamless view transitions',
-        about: `
-            <p>Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.</p>
-            <p>Key features include:</p>
-            <ul>
-                <li>Implemented Coordinator pattern for SwiftUI navigation</li>
-                <li>Added centralized NavigationStack routing management</li>
-                <li>Integrated sheet and fullscreen cover presentation handling</li>
-                <li>Implemented deep link routing structure</li>
-                <li>Created scalable and modular navigation architecture</li>
-                <li>Prepared base foundation for multi-flow app navigation</li>
-            </ul>
-        `,
-        screenshots: [
-            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.30.png',
-            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.37.png',
-            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.45.png',
-            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.32.58.png',
-            'images/NavigationCoodinatorScreenShots/Simulator Screenshot - iPhone 17 Pro - 2026-02-14 at 23.33.05.png'
-        ],
-        relatedTags: ['Navigation', 'Coordinator Pattern', 'Deep Links', 'Routing']
-    },
-    {
-        icon: '�',
-        title: 'YouTube Browser & Downloader',
-        description: 'A productivity-focused floating YouTube player & downloader built for macOS users.',
-        about: `
-            <p>A productivity-focused floating YouTube player & downloader built for macOS users — especially developers.</p>
-            <p>Whether you’re following coding tutorials, debugging with guides, or listening to tech talks, this tool keeps your video visible without switching windows.</p>
-            <p>Key features include:</p>
-            <ul>
-                <li>Always-on-top floating video player</li>
-                <li>Works across all apps and screens</li>
-                <li>Built-in YouTube video downloader</li>
-                <li>Lightweight and distraction-free UI</li>
-                <li>Perfect for coding, learning, and multitasking</li>
-            </ul>
-        `,
-        screenshots: [
-            'images/YoutybeFP/Screenshot 2026-02-15 at 2.10.38 AM (2).png',
-            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.09 AM.png',
-            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.12 AM.png',
-            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.21 AM.png',
-            'images/YoutybeFP/Screenshot 2026-02-15 at 2.11.28 AM.png',
-            'images/YoutybeFP/ss-yt1.png'
-        ],
-        relatedTags: ['macOS', 'SwiftUI', 'YouTube', 'Productivity']
-    },
-    {
-        icon: '�💳',
-        title: 'In-App Purchases',
-        description: 'StoreKit integration, subscription management, receipt validation, and restore purchases functionality',
-        relatedTags: ['StoreKit', 'In-App Purchase', 'Subscriptions', 'Payment']
-    },
-    {
-        icon: '📱',
-        title: 'Home Screens',
-        description: 'Dynamic home screens with post sharing, custom feed layouts, and engaging user interactions',
-        relatedTags: ['UI Design', 'Social', 'Feed', 'Layout']
-    },
-    {
-        icon: '🚀',
-        title: 'App Store Publishing',
-        description: 'Complete app submission process, App Store optimization, and compliance with Apple guidelines',
-        relatedTags: ['App Store', 'Publishing', 'ASO']
-    },
-    {
-        icon: '✈️',
-        title: 'TestFlight Builds',
-        description: 'Beta distribution, user feedback collection, and managing multiple test groups',
-        relatedTags: ['TestFlight', 'Beta Testing', 'CI/CD']
-    },
-    {
-        icon: '🎨',
-        title: 'SwiftUI Design',
-        description: 'Modern declarative UIs with custom components, animations, and responsive layouts',
-        relatedTags: ['SwiftUI', 'Animation', 'Design System', 'UI Components']
-    },
-    {
-        icon: '💾',
-        title: 'Data Persistence',
-        description: 'Core Data, SwiftData, UserDefaults, and cloud sync implementations',
-        relatedTags: ['Core Data', 'SwiftData', 'Persistence', 'Database']
-    }
-];
-
-/**
- * Projects Data Array
- * Each project showcases your work with video demonstrations
- * 
- * GOOGLE DRIVE VIDEO SETUP:
- * This portfolio now uses Google Drive embedded videos!
- * 
- * How to get Google Drive embed links:
- * 1. Upload your video to Google Drive
- * 2. Right-click → Share → Get link → Set to "Anyone with the link"
- * 3. Copy the link (format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing)
- * 4. Extract the FILE_ID from the URL
- * 5. Use format: https://drive.google.com/file/d/FILE_ID/preview
- * 
- * Example:
- * Original: https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/view?usp=sharing
- * Embed:    https://drive.google.com/file/d/1eVYCKQDYmLrGOXtu17FTO6-bZMoDXEl5/preview
- */
-const projects = [
-    {
-        title: 'Navigation Router System',
-        description: 'Built a robust navigation system with coordinator pattern, supporting deep linking and complex navigation flows. Features include custom transitions and state preservation.',
-        videoSrc: 'https://drive.google.com/file/d/1YhP5fV2YhPFU5HwgFf8lwxgcCuumz7xq/preview',  // Google Drive embed
-        isGoogleDrive: true,
-        tags: ['SwiftUI', 'Navigation', 'Coordinator Pattern']
-    },
-    {
-        title: 'Real-Time Chat Application',
-        description: 'Developed a fully-featured chat interface with message bubbles, typing indicators, image sharing, and real-time updates using Combine framework.',
-        videoSrc: 'https://drive.google.com/file/d/1_UgL8_H1XOfploaJ2FXiO3AG-EWWFBX5/preview',  // Google Drive embed
-        isGoogleDrive: true,
-        tags: ['SwiftUI', 'Combine', 'Real-time', 'Firebase']
-    },
-    {
-        title: 'Youtube Browser & Downloader',
-        description: 'Watch, float, and download YouTube videos on macOS while coding or working across multiple screens.',
-        videoSrc: 'https://drive.google.com/file/d/1dxDMITg59PR_4Fbai67zK-ZbzomrEOV_/preview',  // Google Drive embed
-        isGoogleDrive: true,
-        tags: ['AppKit', 'Combine', 'WebKit', 'UniformTypeIdentifiers']
-    },
-    // {
-    //     title: 'In-App Purchase Integration',
-    //     description: 'Complete StoreKit 2 implementation with subscription management, purchase validation, and seamless user experience for premium features.',
-    //     videoSrc: 'https://drive.google.com/file/d/12Q8dRZdgeLy9BsbNmFwN1IRH0cD_j_Za/preview',  // Google Drive embed
-    //     isGoogleDrive: true,
-    //     tags: ['StoreKit', 'Subscriptions', 'Payment']
-    // },
-    // {
-    //     title: 'Social Feed & Sharing',
-    //     description: 'Created an engaging home screen with post creation, image uploads, social sharing capabilities, and pull-to-refresh functionality.',
-    //     videoSrc: 'videos/home-screen.mp4',  // Replace with your Google Drive embed link
-    //     isGoogleDrive: false,  // Set to true when using Google Drive
-    //     tags: ['SwiftUI', 'Social', 'Media Upload']
-    // },
-    // {
-    //     title: 'App Store Deployment',
-    //     description: 'Successfully published multiple apps to the App Store, including app screenshots, descriptions, metadata optimization, and compliance review.',
-    //     videoSrc: 'videos/app-store.mp4',  // Replace with your Google Drive embed link
-    //     isGoogleDrive: false,  // Set to true when using Google Drive
-    //     tags: ['Publishing', 'App Store Connect', 'ASO']
-    // },
-    // {
-    //     title: 'TestFlight Distribution',
-    //     description: 'Managed beta testing programs with TestFlight, coordinating feedback from testers, and iterating on builds before public release.',
-    //     videoSrc: 'videos/testflight.mp4',  // Replace with your Google Drive embed link
-    //     isGoogleDrive: false,  // Set to true when using Google Drive
-    //     tags: ['TestFlight', 'Beta Testing', 'CI/CD']
-    // }
-];
+// Data is loaded from personalData global (set in data/personal.js)
+// These references make the rest of the code work without changes
+const skills = (typeof personalData !== 'undefined') ? personalData.skills : [];
+const projects = (typeof personalData !== 'undefined') ? personalData.projects : [];
+const personalInfo = (typeof personalData !== 'undefined') ? {
+    name: personalData.name,
+    role: personalData.role,
+    tagline: personalData.tagline,
+    profileImage: personalData.profileImage,
+    resumeLink: personalData.resumeLink,
+    about: personalData.about,
+    social: personalData.social,
+    experience: personalData.experience,
+    footer: personalData.footer
+} : {};
 
 /* ============================================
    DOM ELEMENTS
@@ -456,19 +155,37 @@ function renderSkills() {
     const skillsGrid = document.querySelector('.skills-grid');
     if (!skillsGrid) return;
 
+    /**
+     * Check if a skill has enough detail content for a dedicated page.
+     * Only shows "View Details" link when there's actual content to see.
+     */
+    function hasDetailContent(skill) {
+        return skill.about || skill.codeSnippet || skill.githubLink || 
+               (skill.screenshots && skill.screenshots.length > 0);
+    }
+
     // Generate HTML for each skill
-    const skillsHTML = skills.map((skill, index) => `
-        <a href="skill-details.html?id=${index}" class="skill-card-link" style="text-decoration: none; color: inherit; display: block;">
+    const skillsHTML = skills.map((skill, index) => {
+        const hasDetails = hasDetailContent(skill);
+        
+        // Only wrap in link if there's detail content
+        const cardContent = `
             <div class="skill-card">
                 <div class="skill-icon">${skill.icon}</div>
                 <h3 class="skill-title">${skill.title}</h3>
                 <p class="skill-description">${skill.description}</p>
-                <div class="skill-hover-indicator" style="margin-top: 15px; font-size: 0.9rem; color: var(--primary-color); font-weight: 500;">
-                    View Details →
-                </div>
+                ${hasDetails ? `
+                    <div class="skill-hover-indicator" style="margin-top: 15px; font-size: 0.9rem; color: var(--primary-color); font-weight: 500;">
+                        View Details →
+                    </div>
+                ` : ''}
             </div>
-        </a>
-    `).join('');
+        `;
+
+        return hasDetails 
+            ? `<a href="skill-details.html?id=${index}" class="skill-card-link" style="text-decoration: none; color: inherit; display: block;">${cardContent}</a>`
+            : cardContent;
+    }).join('');
 
     // Insert into DOM
     skillsGrid.innerHTML = skillsHTML;
@@ -480,10 +197,8 @@ function renderSkills() {
 
 /**
  * Render project cards dynamically from projects array
- * Each card can open a video modal when clicked
- * Supports both local videos and Google Drive embeds
- * Includes autoplaying muted video previews with play/pause and mute controls
- * Controls only appear on local videos (Google Drive iframes can't be controlled)
+ * Each card shows a project mockup image with hover zoom effect
+ * Clicking opens a full-size image modal
  */
 function renderProjects() {
     const projectsGrid = document.getElementById('projectsGrid');
@@ -494,77 +209,24 @@ function renderProjects() {
 
     // Generate HTML for each project
     const projectsHTML = projects.map((project, index) => {
-        // Prepare thumbnail preview
-        let thumbnailHTML = '';
-        let controlsHTML = '';
-
-        if (project.isGoogleDrive) {
-            // For Google Drive videos, DON'T autoplay to prevent sound
-            // Show static iframe preview that user can click to watch
-            thumbnailHTML = `
-                <iframe 
-                    class="project-video-preview" 
-                    id="preview-${index}"
-                    src="${project.videoSrc}"
-                    frameborder="0"
-                    allow="encrypted-media"
-                    allowfullscreen>
-                </iframe>
-            `;
-            // No controls for Google Drive videos (they don't work due to iframe restrictions)
-            controlsHTML = '';
-        } else {
-            // For local videos, use video element with autoplay and mute
-            thumbnailHTML = `
-                <video 
-                    class="project-video-preview local-video" 
-                    id="preview-${index}"
-                    autoplay 
-                    muted 
-                    loop 
-                    playsinline
-                    data-index="${index}">
-                    <source src="${project.videoSrc}" type="video/mp4">
-                </video>
-            `;
-            // Show controls only for local videos
-            controlsHTML = `
-                <div class="video-controls">
-                    <button class="control-btn play-pause-btn" data-index="${index}" title="Play/Pause">
-                        <svg class="pause-icon-svg" viewBox="0 0 24 24" fill="white">
-                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-                        </svg>
-                        <svg class="play-icon-svg hidden" viewBox="0 0 24 24" fill="white">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </button>
-                    <button class="control-btn mute-btn" data-index="${index}" title="Mute/Unmute">
-                        <svg class="muted-icon-svg" viewBox="0 0 24 24" fill="white">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-                            <line x1="3" y1="3" x2="21" y2="21" stroke="white" stroke-width="2"/>
-                        </svg>
-                        <svg class="unmuted-icon-svg hidden" viewBox="0 0 24 24" fill="white">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                        </svg>
-                    </button>
-                </div>
-            `;
-        }
+        const imageSrc = project.imageSrc || project.videoSrc || '';
 
         return `
-        <div class="project-card" 
-             data-video="${project.videoSrc}" 
-             data-google-drive="${project.isGoogleDrive || false}"
+        <div class="project-card project-image-card" 
+             data-image="${imageSrc}"
              data-index="${index}">
             <div class="project-video-container">
-                ${thumbnailHTML}
-                ${controlsHTML}
+                <img 
+                    class="project-image-preview" 
+                    src="${imageSrc}" 
+                    alt="${project.title}"
+                    loading="lazy"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border: none;">
                 
-                <!-- Overlay with click to expand - appears on hover -->
+                <!-- Overlay with click to expand -->
                 <div class="project-video-overlay">
-                    <div class="play-icon-large">▶</div>
-                    <p class="overlay-text">Click to watch full demo</p>
-                    ${project.isGoogleDrive ? '<small class="drive-badge">📁 Google Drive</small>' : ''}
+                    <div class="play-icon-large">🔍</div>
+                    <p class="overlay-text">Click to view full size</p>
                 </div>
             </div>
             <div class="project-info">
@@ -585,19 +247,12 @@ function renderProjects() {
 
     // Add click event listeners to all project cards
     attachProjectCardListeners();
-
-    // Add video control listeners
-    attachVideoControlListeners();
-
-    // Initialize video states
-    initializeVideoStates();
 }
 
 /**
  * Attach click event listeners to project cards
- * When clicked, opens modal with the project video
- * Detects whether video is from Google Drive or local
- * Excludes clicks on control buttons
+ * For image-based projects: opens image in modal
+ * For video-based projects (legacy): opens video modal
  */
 function attachProjectCardListeners() {
     const projectCards = document.querySelectorAll('.project-card');
@@ -609,9 +264,16 @@ function attachProjectCardListeners() {
                 return;
             }
 
+            const imageSrc = card.getAttribute('data-image');
             const videoSrc = card.getAttribute('data-video');
             const isGoogleDrive = card.getAttribute('data-google-drive') === 'true';
-            openVideoModal(videoSrc, isGoogleDrive);
+
+            // If it's an image-based project (has data-image), open image modal
+            if (imageSrc && imageSrc !== 'null') {
+                openImageModal(imageSrc);
+            } else if (videoSrc) {
+                openVideoModal(videoSrc, isGoogleDrive);
+            }
         });
     });
 }
@@ -778,6 +440,38 @@ function openVideoModal(videoSrc, isGoogleDrive = false) {
 }
 
 /**
+ * Open image modal for project mockups
+ * Shows the full-size image in the existing modal
+ * @param {string} imageSrc - Path to the image
+ */
+function openImageModal(imageSrc) {
+    const modalBody = document.querySelector('.modal-body');
+    if (!modalBody) return;
+
+    // Clear previous content
+    modalBody.innerHTML = '';
+
+    // Create image element
+    const img = document.createElement('img');
+    img.src = imageSrc;
+    img.alt = 'Project Mockup';
+    img.style.width = '100%';
+    img.style.height = 'auto';
+    img.style.display = 'block';
+    img.style.borderRadius = '8px';
+    img.style.maxHeight = '80vh';
+    img.style.objectFit = 'contain';
+    img.loading = 'lazy';
+    modalBody.appendChild(img);
+
+    // Show modal with animation
+    videoModal.classList.add('active');
+
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+}
+
+/**
  * Close video modal
  * Stops video playback and hides modal
  * Works for both local videos and Google Drive embeds
@@ -857,6 +551,156 @@ function initScrollAnimations() {
 }
 
 /* ============================================
+   DYNAMIC PROFILE RENDERING
+   ============================================ */
+
+/**
+ * Render hero section from personalData
+ */
+function renderHero() {
+    if (!personalInfo.name) return;
+
+    const heroName = document.getElementById('heroName');
+    const heroTagline = document.getElementById('heroTagline');
+    const heroGreeting = document.getElementById('heroGreeting');
+    const heroProfileImg = document.getElementById('heroProfileImg');
+
+    if (heroName) heroName.textContent = personalInfo.name;
+    if (heroTagline) heroTagline.textContent = personalInfo.tagline;
+    if (heroGreeting) heroGreeting.textContent = "Hi, I'm";
+    if (heroProfileImg) heroProfileImg.src = personalInfo.profileImage;
+}
+
+/**
+ * Render about section from personalData
+ */
+function renderAbout() {
+    const aboutText = document.getElementById('aboutText');
+    if (!aboutText || !personalInfo.about) return;
+
+    const bioHTML = personalInfo.about.bio.map(p => `
+        <p class="about-description">${p}</p>
+    `).join('');
+
+    const highlightsHTML = personalInfo.about.highlights.map(h => `
+        <div class="highlight-item">
+            <span class="highlight-icon">${h.icon}</span>
+            <div>
+                <h4>${h.title}</h4>
+                <p>${h.description}</p>
+            </div>
+        </div>
+    `).join('');
+
+    aboutText.innerHTML = `
+        ${bioHTML}
+        <div class="highlights">
+            ${highlightsHTML}
+        </div>
+    `;
+}
+
+/**
+ * Render experience timeline from personalData
+ */
+function renderExperience() {
+    const timeline = document.getElementById('timeline');
+    if (!timeline || !personalInfo.experience) return;
+
+    const itemsHTML = personalInfo.experience.map(exp => `
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+                <h3 class="timeline-company">${exp.company}</h3>
+                <p class="timeline-role">${exp.role}</p>
+                <div class="timeline-meta">
+                    <span>📍 ${exp.location}</span>
+                    <span>📅 ${exp.period}</span>
+                </div>
+                <p class="timeline-description">${exp.description}</p>
+            </div>
+        </div>
+    `).join('');
+
+    timeline.innerHTML = itemsHTML;
+}
+
+/**
+ * Render contact section from personalData
+ */
+function renderContact() {
+    const contact = personalInfo.social;
+    if (!contact) return;
+
+    // Update existing contact cards if they exist
+    const emailLink = document.querySelector('.contact-card:nth-child(1) a');
+    const linkedinLink = document.querySelector('.contact-card:nth-child(2) a');
+    const githubLink = document.querySelector('.contact-card:nth-child(3) a');
+    const cvLink = document.querySelector('.contact-card:nth-child(4) a');
+
+    if (emailLink) emailLink.href = `mailto:${contact.email}`;
+    if (emailLink) emailLink.textContent = contact.email;
+    if (linkedinLink) linkedinLink.href = contact.linkedin;
+    if (githubLink) githubLink.href = contact.github;
+    if (cvLink) cvLink.href = contact.cv;
+}
+
+/**
+ * Render footer from personalData
+ */
+function renderFooter() {
+    const footerText = document.querySelector('.footer p');
+    if (footerText && personalInfo.footer) {
+        footerText.textContent = personalInfo.footer.copyright;
+    }
+}
+
+/**
+ * Render all personal info sections
+ */
+function renderPersonalInfo() {
+    renderHero();
+    renderAbout();
+    renderExperience();
+    renderContact();
+    renderFooter();
+}
+
+/* ============================================
+   THEME TOGGLE (Dark/Light Mode)
+   ============================================ */
+
+/**
+ * Initialize theme toggle functionality
+ * Saves preference in localStorage
+ */
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+
+    // Load saved theme preference
+    const savedTheme = localStorage.getItem('portfolio-theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeToggle.textContent = '☀️';
+    }
+
+    // Toggle theme on click
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+
+        // Update button icon
+        if (document.body.classList.contains('light-mode')) {
+            themeToggle.textContent = '☀️';
+            localStorage.setItem('portfolio-theme', 'light');
+        } else {
+            themeToggle.textContent = '🌙';
+            localStorage.setItem('portfolio-theme', 'dark');
+        }
+    });
+}
+
+/* ============================================
    INITIALIZATION
    ============================================ */
 
@@ -865,9 +709,15 @@ function initScrollAnimations() {
  * This ensures all elements exist before we try to manipulate them
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // Render personal info from data/personal.js
+    renderPersonalInfo();
+
     // Render dynamic content
     renderSkills();
     renderProjects();
+
+    // Initialize theme toggle
+    initThemeToggle();
 
     // Check for skill details page
     if (typeof initSkillDetails === 'function') {

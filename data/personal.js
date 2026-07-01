@@ -12,7 +12,7 @@ const personalData = {
     role: "iOS Developer",
     tagline: "Crafting beautiful, performant iOS applications with SwiftUI",
     profileImage: "images/profile.png",
-    resumeLink: "https://drive.google.com/uc?export=download&id=1Qo4MW7H4b6Y_WM1ozX7E2xG4istnSumO",
+    resumeLink: "CV/M.Dilshan Thalagahapitiya2026.pdf",
 
     // ========== ABOUT ==========
     about: {
@@ -45,7 +45,7 @@ const personalData = {
         email: "dilshan.thalagahapitiya11@gmail.com",
         linkedin: "https://www.linkedin.com/in/dilshan-thalagahapitiya-a06300159/",
         github: "https://github.com/DilshanThalagahapitiya",
-        cv: "https://drive.google.com/uc?export=download&id=1Qo4MW7H4b6Y_WM1ozX7E2xG4istnSumO"
+        cv: "CV/M.Dilshan Thalagahapitiya2026.pdf"
     },
 
     // ========== WORK EXPERIENCE ==========
